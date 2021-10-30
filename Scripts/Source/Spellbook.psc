@@ -26,6 +26,9 @@ Form property Spellbook_MessageText_BaseForm auto
 Form property Spellbook_SpellbookText_BaseForm auto
 Form property Spellbook_SpellNotesText_BaseForm auto
 
+; Global Variables
+GlobalVariable property Spellbook_CanTranscribeSpells auto
+
 ; TODO TODO TODO ~ REMOVE THIS ~ DO NOT RELEASE THIS FUNCTION TO NEXUS ~ TODO TODO TODO
 function AddTestItems()
     ; Add some Spell Tomes
@@ -87,15 +90,7 @@ endFunction
 
 function ReadSpellNotes()
     Utility.WaitMenuMode(1)
-    SetMessageText("~ Viewing your Spell Notes ~")
-    int transcriptSpell = 0
-    int closeBook = 1
-    int result = Spellbook_Message_SpellNotes.Show()
-    if result == transcriptSpell
-        ; 
-    elseIf result == closeBook
-        Input.TapKey(1) ; Escape
-    endIf
+    Spellbook_Message_ReadSpellNotes.Show(self)
 endFunction
 
 function SetPlayerSpellNoteText()
