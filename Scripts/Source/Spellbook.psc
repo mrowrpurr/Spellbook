@@ -93,20 +93,6 @@ function ReadSpellNotes()
     Spellbook_Message_ReadSpellNotes.Show(self)
 endFunction
 
-function SetPlayerSpellNoteText()
-    int spellList = GetSpellNotesList(PlayerRef)
-    string noteText = "<font size='30'>Spell Notes</font>\n\n<ul>\n"
-    int spellListCount = JArray.count(spellList)
-    int i = 0
-    while i < spellListCount
-        Form theSpell = JArray.getForm(spellList, i)
-        noteText += "<li>" + theSpell.GetName() + "</li>\n"
-        i += 1
-    endWhile
-    noteText += "</ul>"
-    SetSpellNotesText(noteText)
-endFunction
-
 bool function HasSpellNotes(Actor theActor)
     return theActor.GetItemCount(Spellbook_SpellNotes_BaseForm) > 0
 endFunction
@@ -127,25 +113,13 @@ function AddSpellToSpellNotes(Actor theActor, Spell theSpell)
         AddSpellNotes(theActor)
     endIf
 
-    JArray.addForm(GetSpellNotesList(theActor), theSpell)
-    SetPlayerSpellNoteText()
+    Spellbook_SpellNotes.AddSpell(theActor, theSpell)
+    Spellbook_SpellNotes.UpdateSpellNotesText(self, theActor)
 
     ShowOkMessage("Added notes for spell '" + theSpell.GetName() + "' to your Spell Notes")
 endFunction
 
-int function GetSpellNotesMap(Actor theActor)
-    int spellNotesMap = JFormDB.solveObj(theActor, ".spellbook.spellnotes")
-    if ! spellNotesMap
-        spellNotesMap = JMap.object()
-        JMap.setObj(spellNotesMap, "spellList", JArray.object())
-        JFormDB.solveObjSetter(theActor, ".spellbook.spellnotes", spellNotesMap, createMissingKeys = true)
-    endIf
-    return spellNotesMap
-endFunction
 
-int function GetSpellNotesList(Actor theActor)
-    return JMap.getObj(GetSpellNotesMap(theActor), "spellList")
-endFunction
 
 ; Give the player spell notes!
 function AddSpellNotes(Actor theActor)
@@ -156,10 +130,7 @@ function AddSpellNotes(Actor theActor)
     endIf
 endFunction
 
-; Sets the visible text in whatever Spell Note is being read
-function SetSpellNotesText(string text)
-    Spellbook_SpellNotesText_BaseForm.SetName(text)
-endFunction
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Spell Book (the actual inventory book)
