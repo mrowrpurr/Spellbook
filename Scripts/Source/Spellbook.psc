@@ -18,16 +18,44 @@ Form property Spellbook_Spellbook_BaseForm1 auto
 
 ; Messages
 Message property Spellbook_Message_Ok auto
+Message property Spellbook_Message_Spellbook auto
+Message property Spellbook_Message_SpellNotes auto
 
 ; Text Replacement Forms
 Form property Spellbook_MessageText_BaseForm auto
 Form property Spellbook_SpellbookText_BaseForm auto
 Form property Spellbook_SpellNotesText_BaseForm auto
 
+; TODO TODO TODO ~ REMOVE THIS ~ DO NOT RELEASE THIS FUNCTION TO NEXUS ~ TODO TODO TODO
+function AddTestItems()
+    ; Add some Spell Tomes
+
+    Utility.Wait(1)
+
+    ; [Alteration]
+    ; Novice
+    PlayerRef.AddSpell(Game.GetForm(0x0005ad5c) as Spell)
+    PlayerRef.AddItem(Game.GetForm(0x0009e2a7))
+    ; Apprentice
+    PlayerRef.AddItem(Game.GetForm(0x000a26e2))
+    ; Adept
+    PlayerRef.AddItem(Game.GetForm(0x000a26e6))
+
+    ; [Destruction]
+    ; Novice
+    PlayerRef.AddSpell(Game.GetForm(0x0002dd2a) as Spell)
+    PlayerRef.AddItem(Game.GetForm(0x0009cd52))
+    ; Apprentice
+    PlayerRef.AddItem(Game.GetForm(0x000a26fe))
+    ; Adept
+    PlayerRef.AddItem(Game.GetForm(0x000a2708))
+endFunction
+
 ; Mod Installation
 event OnInit()
     CurrentlyInstalledVersion = GetCurrentVersion()
     AddSpellbook(PlayerRef)
+    AddTestItems()
 endEvent
 
 ; Load Game Events
@@ -58,12 +86,21 @@ endFunction
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 function ReadSpellNotes()
-    ; Nothing to do here yet. This *will* shortly open a UIListMenu!
+    Utility.WaitMenuMode(1)
+    SetMessageText("~ Viewing your Spell Notes ~")
+    int transcriptSpell = 0
+    int closeBook = 1
+    int result = Spellbook_Message_SpellNotes.Show()
+    if result == transcriptSpell
+        ; 
+    elseIf result == closeBook
+        Input.TapKey(1) ; Escape
+    endIf
 endFunction
 
 function SetPlayerSpellNoteText()
     int spellList = GetSpellNotesList(PlayerRef)
-    string noteText = "<font size='30'>Spells to learn</font>\n\n<ul>\n"
+    string noteText = "<font size='30'>Spell Notes</font>\n\n<ul>\n"
     int spellListCount = JArray.count(spellList)
     int i = 0
     while i < spellListCount
@@ -117,9 +154,11 @@ endFunction
 
 ; Give the player spell notes!
 function AddSpellNotes(Actor theActor)
-    ObjectReference theSpellNotes = SpellbookContainer.GetReference().PlaceAtMe(Spellbook_SpellNotes_BaseForm)
-    SpellNotes.ForceRefTo(theSpellNotes)
-    theActor.AddItem(theSpellNotes)
+    if ! HasSpellNotes(theActor)
+        ObjectReference theSpellNotes = SpellbookContainer.GetReference().PlaceAtMe(Spellbook_SpellNotes_BaseForm)
+        SpellNotes.ForceRefTo(theSpellNotes)
+        theActor.AddItem(theSpellNotes)
+    endIf
 endFunction
 
 ; Sets the visible text in whatever Spell Note is being read

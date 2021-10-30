@@ -1,5 +1,5 @@
 
-- [ ] Spell Tomes go into Spell book
+- [ ] Spell Tomes go into Spell Notes
     - [ ] Cannot learn those above your skill level
     - [ ] The ones you can learn... take awhile.
 
