@@ -6,13 +6,15 @@ Actor property PlayerRef auto
 ; Versioning
 string property CurrentlyInstalledVersion auto
 
-; Spellbook Quest Aliases
+; Quest Aliases
+ReferenceAlias property SpellNotes auto
+ReferenceAlias property SpellNotesContainer auto
 ReferenceAlias property SpellbookBook auto
-ReferenceAlias property SpellbookText auto
 ReferenceAlias property SpellbookContainer auto
 
-; Spellbook Type Forms
-Form property Spellbook_Spellbook1 auto
+; Spellbook and Spell Note Type Forms
+Form property Spellbook_SpellNotes_BaseForm auto
+Form property Spellbook_Spellbook_BaseForm1 auto
 
 ; Messages
 Message property Spellbook_Message_Ok auto
@@ -24,7 +26,7 @@ Form property Spellbook_MessageText_BaseForm auto
 ; Mod Installation
 event OnInit()
     CurrentlyInstalledVersion = GetCurrentVersion()
-    AddSpellbookToPlayer()
+    AddSpellbook(PlayerRef)
 endEvent
 
 ; Load Game Events
@@ -35,13 +37,6 @@ endEvent
 ; Versioning
 string function GetCurrentVersion() global
     return "1.0"
-endFunction
-
-; Give the player a spellbook!
-function AddSpellbookToPlayer()
-    ObjectReference theSpellbook = SpellbookContainer.GetReference().PlaceAtMe(Spellbook_Spellbook1)
-    SpellbookBook.ForceRefTo(theSpellbook)
-    PlayerRef.AddItem(theSpellbook)
 endFunction
 
 ; Sets the visible text in whatever Spellbook is being read
@@ -60,4 +55,48 @@ endFunction
 
 function SetMessageText(string text)
     Spellbook_MessageText_BaseForm.SetName(text)
+endFunction
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Spell Notes
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+bool function HasSpellNotes(Actor theActor)
+    return theActor.GetItemCount(Spellbook_SpellNotes_BaseForm) > 0
+endFunction
+
+function AddSpellToSpellNotes(Actor theActor, Spell theSpell)
+    if theActor != PlayerRef
+        Debug.MessageBox("Adding spells to spell notes only currently supported for the Player")
+        return
+    endIf
+
+    if ! HasSpellNotes(theActor)
+        AddSpellNotes(theActor)
+    endIf
+
+    ShowOkMessage("Added notes for spell '" + theSpell.GetName() + "'' to your Spell Notes")
+endFunction
+
+; Give the player spell notes!
+function AddSpellNotes(Actor theActor)
+    ObjectReference theSpellNotes = SpellbookContainer.GetReference().PlaceAtMe(Spellbook_SpellNotes_BaseForm)
+    SpellbookBook.ForceRefTo(theSpellNotes)
+    theActor.AddItem(theSpellNotes)
+endFunction
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Spell Book (the actual inventory book)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; TODO: update with all additional Spellbook forms, if we add them!
+bool function HasSpellbook(Actor theActor)
+    return theActor.GetItemCount(Spellbook_Spellbook_BaseForm1) > 0
+endFunction
+
+; Give the player a spellbook!
+function AddSpellbook(Actor theActor)
+    ObjectReference theSpellbook = SpellbookContainer.GetReference().PlaceAtMe(Spellbook_Spellbook_BaseForm1)
+    SpellbookBook.ForceRefTo(theSpellbook)
+    theActor.AddItem(theSpellbook)
 endFunction
