@@ -21,7 +21,8 @@ Message property Spellbook_Message_Ok auto
 
 ; Text Replacement Forms
 Form property Spellbook_MessageText_BaseForm auto
-Form property Spellbook_BookOrNoteText_BaseForm auto
+Form property Spellbook_SpellbookText_BaseForm auto
+Form property Spellbook_SpellNotesText_BaseForm auto
 
 ; Mod Installation
 event OnInit()
@@ -37,11 +38,6 @@ endEvent
 ; Versioning
 string function GetCurrentVersion() global
     return "1.0"
-endFunction
-
-; Sets the visible text in whatever Spellbook is being read
-function SetBookText(string text)
-    Spellbook_BookOrNoteText_BaseForm.SetName(text)
 endFunction
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -76,24 +72,26 @@ function SetPlayerSpellNoteText()
         i += 1
     endWhile
     noteText += "</ul>"
-    SetBookText(noteText)
+    SetSpellNotesText(noteText)
 endFunction
 
 bool function HasSpellNotes(Actor theActor)
     return theActor.GetItemCount(Spellbook_SpellNotes_BaseForm) > 0
 endFunction
 
-function AddSpellToSpellNotes(Actor theActor, Spell theSpell)
-    Debug.MessageBox("Adding spell to notes for actor " + theActor)
-    Debug.MessageBox("The data for the actor is: " + GetSpellNotesMap(theActor))
-    Debug.MessageBox("The list of spells for the actor is: " + GetSpellNotesList(theActor))
+Book function GetSpellNotes(Actor theActor)
+    return SpellNotes.GetReference().GetBaseObject() as Book
+endFunction
 
+function AddSpellToSpellNotes(Actor theActor, Spell theSpell)
     if theActor != PlayerRef
         Debug.MessageBox("Adding spells to spell notes only currently supported for the Player")
         return
     endIf
 
-    if ! HasSpellNotes(theActor)
+    if HasSpellNotes(theActor)
+        PO3_SKSEFunctions.ClearReadFlag(GetSpellNotes(theActor))
+    else
         AddSpellNotes(theActor)
     endIf
 
@@ -120,8 +118,13 @@ endFunction
 ; Give the player spell notes!
 function AddSpellNotes(Actor theActor)
     ObjectReference theSpellNotes = SpellbookContainer.GetReference().PlaceAtMe(Spellbook_SpellNotes_BaseForm)
-    SpellbookBook.ForceRefTo(theSpellNotes)
+    SpellNotes.ForceRefTo(theSpellNotes)
     theActor.AddItem(theSpellNotes)
+endFunction
+
+; Sets the visible text in whatever Spell Note is being read
+function SetSpellNotesText(string text)
+    Spellbook_SpellNotesText_BaseForm.SetName(text)
 endFunction
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -138,4 +141,9 @@ function AddSpellbook(Actor theActor)
     ObjectReference theSpellbook = SpellbookContainer.GetReference().PlaceAtMe(Spellbook_Spellbook_BaseForm1)
     SpellbookBook.ForceRefTo(theSpellbook)
     theActor.AddItem(theSpellbook)
+endFunction
+
+; Sets the visible text in whatever Spellbook is being read
+function SetSpellbookText(string text)
+    Spellbook_SpellbookText_BaseForm.SetName(text)
 endFunction
