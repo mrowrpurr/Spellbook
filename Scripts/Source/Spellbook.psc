@@ -88,11 +88,6 @@ endFunction
 ; Spell Notes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-function ReadSpellNotes()
-    Utility.WaitMenuMode(1)
-    Spellbook_Message_ReadSpellNotes.Show(self)
-endFunction
-
 bool function HasSpellNotes(Actor theActor)
     return theActor.GetItemCount(Spellbook_SpellNotes_BaseForm) > 0
 endFunction
