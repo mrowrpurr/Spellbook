@@ -42,6 +42,10 @@ Actor property CurrentActor auto
 ImageSpaceModifier property FadeToBlack_Enter auto
 ImageSpaceModifier property FadeToBlack_Hold auto
 ImageSpaceModifier property FadeToBlack_Leave auto
+Sound property ITMBookOpen auto
+Sound property ITMBookClose auto
+Sound property ITMBookPageTurnForward auto
+Sound property ITMBookPageTurnBackward auto
 
 ; TODO TODO TODO ~ REMOVE THIS ~ DO NOT RELEASE THIS FUNCTION TO NEXUS ~ TODO TODO TODO
 function AddTestItems()

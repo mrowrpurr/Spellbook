@@ -15,33 +15,44 @@ function Show(Spellbook spellbookScript, Spell theSpell, Actor theActor) global
     int no = 1
     int result = spellbookScript.Spellbook_Message_TranscribeSpell.Show()
     if result == yes
-
-        Input.TapKey(1) ; Escape (Book)
-
-        FadeToBlack(spellbookScript)
-
-        Utility.WaitMenuMode(1)
-
-        Input.TapKey(1) ; Escape (Inventory)
-        Input.TapKey(1) ; Escape (Inventory)
-
-        Utility.WaitMenuMode(1)
-
-        spellbookScript.GameHour.Mod(hoursRequired)
-
-        ; Play a sound!
-        Debug.Notification("Waiting...")
-        Utility.WaitMenuMode(4.0)
-        Debug.Notification("Will play a sound here...")
-        Utility.WaitMenuMode(4.0)
-
-        FadeFromBlack(spellbookScript)
-
-        theActor.AddSpell(theSpell, abVerbose = false)
-        Debug.Notification(theActor.GetActorBase().GetName() + " transcribed " + theSpell.GetName())
+        RunTranscribeSpellScene(spellbookScript, theActor, theSpell, hoursRequired)
     elseIf result == no
         Spellbook_UI_ReadSpellNotes.Show(spellbookScript)
     endIf
+endFunction
+
+function RunTranscribeSpellScene(Spellbook spellbookScript, Actor theActor, Spell theSpell, int hoursRequired) global
+    FadeToBlack(spellbookScript)
+
+    Input.TapKey(1) ; Escape (Close Book)
+    Utility.WaitMenuMode(0.1)
+    Input.TapKey(1) ; Escape (Inventory)
+    Utility.WaitMenuMode(0.1)
+    Input.TapKey(1) ; Escape (Inventory)
+
+    Utility.WaitMenuMode(1)
+    spellbookScript.ITMBookOpen.Play(theActor)
+
+    Utility.WaitMenuMode(1.5)
+    spellbookScript.ITMBookPageTurnForward.Play(theActor)
+    
+    Utility.WaitMenuMode(1.5)
+    spellbookScript.ITMBookPageTurnBackward.Play(theActor)
+
+    Utility.WaitMenuMode(1.5)
+    spellbookScript.ITMBookPageTurnForward.Play(theActor)
+
+    Utility.WaitMenuMode(1.5)
+    spellbookScript.ITMBookOpen.Play(theActor)
+
+    Utility.WaitMenuMode(1)
+
+    spellbookScript.GameHour.Mod(hoursRequired)
+
+    FadeFromBlack(spellbookScript)
+
+    theActor.AddSpell(theSpell, abVerbose = false)
+    Debug.Notification(theActor.GetActorBase().GetName() + " transcribed " + theSpell.GetName())
 endFunction
 
 function FadeToBlack(Spellbook spellbookScript) global
