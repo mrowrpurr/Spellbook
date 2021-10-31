@@ -47,3 +47,17 @@ Form[] function GetTranscribeableSpells(Actor theActor) global
     endWhile
     return JArray.asFormArray(transcribableSpells)
 endFunction
+
+int function GetHoursRequiredToTranscribeSpell(Actor theActor, Spell theSpell) global
+    string schoolOfMagic        = Spellbook_Spell.GetSchool(theSpell)
+    int spellSkillLevel         = Spellbook_Spell.GetSkillLevel(theSpell)
+    string spellSkillLevelName  = Spellbook_Spell.GetSkillLevelName(theSpell)
+    float actorSkillAV          = theActor.GetActorValue(schoolOfMagic)
+    int baseHoursRequired       = Spellbook_Config.GetTranscriptionHoursRequired(spellSkillLevelName)
+    float hoursToSubtract       = baseHoursRequired * (actorSkillAV / 100.0)
+    int hoursRequired           = Math.Ceiling(baseHoursRequired - hoursToSubtract)
+    if hoursRequired <= 0
+        hoursRequired = 1
+    endIf
+    return hoursRequired
+endFunction

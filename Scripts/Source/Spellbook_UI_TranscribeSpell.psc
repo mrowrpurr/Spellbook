@@ -1,12 +1,14 @@
 scriptName Spellbook_UI_TranscribeSpell
 
 function Show(Spellbook spellbookScript, Spell theSpell, Actor theActor) global
-    spellbookScript.SetMessageText("~ Spell Transcription ~\n\n" + \
+    int hoursRequired = Spellbook_Actor.GetHoursRequiredToTranscribeSpell(theActor, theSpell)
+
+    spellbookScript.SetMessageText( \
         "Transcribing " + \
         Spellbook_Spell.GetSkillLevelName(theSpell) + " " + \
         Spellbook_Spell.GetSchool(theSpell) + " " + \
         "Spell " + theSpell.GetName() + \
-        "\n\nTranscribing this spell will take XXXX hours.\n\n" + \
+        "\n\nTranscribing this spell will take " + hoursRequired + " hours.\n\n" + \
         "Are you ready to transcribe?")
 
     int yes = 0

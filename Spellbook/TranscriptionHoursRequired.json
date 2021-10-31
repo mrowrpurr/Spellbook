@@ -1,0 +1,7 @@
+{
+    "Novice":     6,
+    "Apprentice": 12,
+    "Adept":      18,
+    "Expert":     24,
+    "Master":     30
+}

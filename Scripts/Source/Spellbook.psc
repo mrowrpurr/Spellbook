@@ -74,7 +74,6 @@ Event OnSelect(string eventName, string strArg, float numArg, Form formArg)
 
     if OnSelect_DelegateToTranscribeSpell
         OnSelect_DelegateToTranscribeSpell = false 
-        Spellbook_UI_TranscribeSpell.Show(self, None, PlayerRef)
         Spellbook_UI_ChooseSpellToTranscribe.OnChooseSpell(self, CurrentActor, strArg as int)
     endIf
 EndEvent
