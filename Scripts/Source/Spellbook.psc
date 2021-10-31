@@ -6,6 +6,9 @@ Actor property PlayerRef auto
 ; Versioning
 string property CurrentlyInstalledVersion auto
 
+; Game Time
+GlobalVariable property GameHour auto
+
 ; Quest Aliases
 ReferenceAlias property SpellNotes auto
 ReferenceAlias property SpellNotesContainer auto
@@ -34,6 +37,11 @@ GlobalVariable property Spellbook_CanTranscribeSpells auto
 bool property OnSelect_DelegateToTranscribeSpell auto
 UIListMenu property CurrentListMenu auto
 Actor property CurrentActor auto
+
+; Effects
+ImageSpaceModifier property FadeToBlack_Enter auto
+ImageSpaceModifier property FadeToBlack_Hold auto
+ImageSpaceModifier property FadeToBlack_Leave auto
 
 ; TODO TODO TODO ~ REMOVE THIS ~ DO NOT RELEASE THIS FUNCTION TO NEXUS ~ TODO TODO TODO
 function AddTestItems()
