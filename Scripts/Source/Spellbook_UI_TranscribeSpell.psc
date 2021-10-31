@@ -52,6 +52,8 @@ function RunTranscribeSpellScene(Spellbook spellbookScript, Actor theActor, Spel
     FadeFromBlack(spellbookScript)
 
     theActor.AddSpell(theSpell, abVerbose = false)
+    Spellbook_SpellNotes.RemoveSpell(theActor, theSpell)
+
     Debug.Notification(theActor.GetActorBase().GetName() + " transcribed " + theSpell.GetName())
 endFunction
 

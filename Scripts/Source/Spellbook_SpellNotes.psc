@@ -19,6 +19,11 @@ function AddSpell(Actor theActor, Spell theSpell) global
     JArray.addForm(Data_GetSpellsArray(theActor), theSpell)
 endFunction
 
+; Remove a spell from the notes for this actor
+function RemoveSpell(Actor theActor, Spell theSpell) global
+    JArray.eraseForm(Data_GetSpellsArray(theActor), theSpell)
+endFunction
+
 ; Set the text for the 'Spell Notes'
 ; MUST be called BEFORE you trigger OnRead() of the 'Spell Notes'
 function UpdateSpellNotesText(Spellbook spellbookScript, Actor theActor) global
