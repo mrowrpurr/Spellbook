@@ -20,6 +20,7 @@ Form property Spellbook_Spellbook_BaseForm1 auto
 Message property Spellbook_Message_Ok auto
 Message property Spellbook_Message_Spellbook auto
 Message property Spellbook_Message_SpellNotes auto
+Message property Spellbook_Message_TranscribeSpell auto
 
 ; Text Replacement Forms
 Form property Spellbook_MessageText_BaseForm auto
@@ -28,6 +29,11 @@ Form property Spellbook_SpellNotesText_BaseForm auto
 
 ; Global Variables
 GlobalVariable property Spellbook_CanTranscribeSpells auto
+
+; UI Extensions Widgets and Workaround (because UI Extensions gets blocked when the Book menu is open)
+bool property OnSelect_DelegateToTranscribeSpell auto
+UIListMenu property CurrentListMenu auto
+Actor property CurrentActor auto
 
 ; TODO TODO TODO ~ REMOVE THIS ~ DO NOT RELEASE THIS FUNCTION TO NEXUS ~ TODO TODO TODO
 function AddTestItems()
@@ -59,7 +65,19 @@ event OnInit()
     CurrentlyInstalledVersion = GetCurrentVersion()
     AddSpellbook(PlayerRef)
     AddTestItems()
+    RegisterForModEvent("UIListMenu_SelectItem", "OnSelect")
 endEvent
+
+Event OnSelect(string eventName, string strArg, float numArg, Form formArg)
+    CurrentListMenu.Unlock()
+    CurrentListMenu = None
+
+    if OnSelect_DelegateToTranscribeSpell
+        OnSelect_DelegateToTranscribeSpell = false 
+        Spellbook_UI_TranscribeSpell.Show(self, None, PlayerRef)
+        Spellbook_UI_ChooseSpellToTranscribe.OnChooseSpell(self, CurrentActor, strArg as int)
+    endIf
+EndEvent
 
 ; Load Game Events
 event OnPlayerLoadGame()

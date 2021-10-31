@@ -6,7 +6,7 @@ Spellbook property SpellbookScript auto
 ; Handle when the SpellNote is read by the player
 event OnRead()
     Utility.WaitMenuMode(1)
-    Spellbook_Message_ReadSpellNotes.Show(SpellbookScript)
+    Spellbook_UI_ReadSpellNotes.Show(SpellbookScript)
 endEvent
 
 ; Return a list of all of the Spells for this actor

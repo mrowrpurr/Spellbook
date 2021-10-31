@@ -33,3 +33,17 @@ int function GetSkillLevel(Actor theActor, string schoolOfMagic) global
         return 5
     endIf
 endFunction
+
+Form[] function GetTranscribeableSpells(Actor theActor) global
+    int transcribableSpells = JArray.object()
+    Form[] spellNotesSpells = Spellbook_SpellNotes.GetSpells(theActor)
+    int i = 0
+    while i < spellNotesSpells.Length
+        Spell theSpell = spellNotesSpells[i] as Spell
+        if Spellbook_Actor.CanTranscribe(theActor, theSpell)
+            JArray.addForm(transcribableSpells, theSpell)
+        endIf
+        i += 1
+    endWhile
+    return JArray.asFormArray(transcribableSpells)
+endFunction
