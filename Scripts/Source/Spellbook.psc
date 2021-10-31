@@ -28,7 +28,7 @@ Message property Spellbook_Message_TranscribeSpell auto
 ; Text Replacement Forms
 Form property Spellbook_MessageText_BaseForm auto
 Form property Spellbook_SpellbookText_BaseForm auto
-Form property Spellbook_SpellNotesText_BaseForm auto
+Form property Spellbook_SpellNotesText_BaseForm1 auto
 
 ; Global Variables
 GlobalVariable property Spellbook_CanTranscribeSpells auto
@@ -75,7 +75,6 @@ endFunction
 ; Mod Installation
 event OnInit()
     CurrentlyInstalledVersion = GetCurrentVersion()
-    AddSpellbook(PlayerRef)
     AddTestItems()
     RegisterForModEvent("UIListMenu_SelectItem", "OnSelect")
 endEvent

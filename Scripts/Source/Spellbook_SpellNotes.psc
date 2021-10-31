@@ -42,7 +42,7 @@ endFunction
 
 ; Sets the visible text in whatever Spell Note is being read
 function SetSpellNotesText(Spellbook spellbookScript, string text) global
-    spellbookScript.Spellbook_SpellNotesText_BaseForm.SetName(text)
+    spellbookScript.Spellbook_SpellNotesText_BaseForm1.SetName(text)
 endFunction
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
