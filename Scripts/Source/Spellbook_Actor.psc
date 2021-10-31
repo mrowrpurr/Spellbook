@@ -61,3 +61,23 @@ int function GetHoursRequiredToTranscribeSpell(Actor theActor, Spell theSpell) g
     endIf
     return hoursRequired
 endFunction
+
+bool function HasSpellNotes(Spellbook spellbookScript, Actor theActor) global
+    return theActor.GetItemCount(spellbookScript.Spellbook_SpellNotes_BaseForm) > 0
+endFunction
+
+; TODO: update with all additional Spellbook forms, if we add them!
+bool function HasSpellbook(Spellbook spellbookScript, Actor theActor) global
+    return theActor.GetItemCount(spellbookScript.Spellbook_Spellbook_BaseForm1) > 0
+endFunction
+
+; Give the player a spellbook!
+function AddSpellbook(Spellbook spellbookScript, Actor theActor) global
+    ObjectReference theSpellbook = spellbookScript.SpellbookContainer.GetReference().PlaceAtMe(spellbookScript.Spellbook_Spellbook_BaseForm1)
+    spellbookScript.SpellbookBook.ForceRefTo(theSpellbook)
+
+    ; TODO ensure that we give everyone a unique spellbook
+    theSpellbook.SetDisplayName(theActor.GetActorBase().GetName() + "'s Spellbook")
+
+    theActor.AddItem(theSpellbook)
+endFunction

@@ -8,3 +8,8 @@ event OnRead()
     Utility.WaitMenuMode(1)
     Spellbook_UI_ReadSpellbook.Show(SpellbookScript)
 endEvent
+
+; Is the provided Form a Spellbook?
+bool function IsSpellbook(Spellbook spellbookScript, Form theForm) global
+    return SpellbookScript.Spellbook_SpellbooksFormList.HasForm(theForm)
+endFunction

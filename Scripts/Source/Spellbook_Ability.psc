@@ -18,12 +18,18 @@ endEvent
 
 ; When an item, e.g. a Spell Tome, is added to the player
 event OnItemAdded(Form theItem, int count, ObjectReference itemReference, ObjectReference container)
+    ; Is this a Spell Tome?
+    Spell taughtSpell
     Book theBook = theItem as Book
     if theBook
-        Spell taughtSpell = theBook.GetSpell()
-        if taughtSpell
-            ThisActor.RemoveItem(theBook, count, abSilent = true)
-            SpellbookScript.AddSpellToSpellNotes(ThisActor, taughtSpell)
-        endIf
+        taughtSpell = theBook.GetSpell()
+    endIf
+
+    if theBook && taughtSpell
+        ThisActor.RemoveItem(theBook, count, abSilent = true)
+        SpellbookScript.AddSpellToSpellNotes(ThisActor, taughtSpell)
+    elseIf Spellbook_Spellbook.IsSpellbook(SpellbookScript, theItem)
+        ; TODO check whether or not this is their FIRST one
+        SpellbookScript.ShowOkMessage("You have acquired a Spellbook!\n\nOpen this book to view or prepare your spells.")
     endIf
 endEvent
