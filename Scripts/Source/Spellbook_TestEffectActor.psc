@@ -5,10 +5,27 @@ Spellbook property SpellbookScript auto
 
 event OnEffectStart(Actor target, Actor caster)
     Actor marcurio = target ; Game.GetForm(0xb9986) as Actor
-    Spell testSpell = marcurio.GetActorBase().GetNthSpell(1) as Spell
-    Debug.Trace("Removing ActorBase spell " + testSpell.GetName() + " from Actor " + marcurio)
-    PO3_SKSEFunctions.RemoveBaseSpell(marcurio, testSpell)
-    Debug.Trace("Removed!")
+
+    Debug.Trace(marcurioBase)
+
+    ActorBase marcurioBase = marcurio.GetActorBase()
+    
+    int baseSpells = JArray.object()
+    int count = marcurioBase.GetSpellCount()
+    int i = 0
+
+    while i < count
+        JArray.addForm(baseSpells, marcurioBase.GetNthSpell(i))
+        Debug.Trace(marcurioBase.GetNthSpell(i))
+        i += 1
+    endWhile
+
+    i = 0
+    while i < count
+        Debug.Trace("Removing " + JArray.getForm(baseSpells, i).GetName())
+        PO3_SKSEFunctions.RemoveBaseSpell(marcurio, JArray.getForm(baseSpells, i) as Spell)
+        i += 1
+    endWhile
 endEvent
 
 
