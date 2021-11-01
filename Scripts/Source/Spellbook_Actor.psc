@@ -118,6 +118,7 @@ function TakeAwayAllSpellTomes(Actor theActor) global
             theSpell = theBook.GetSpell()
         endIf
         if theSpell
+            Debug.MessageBox("Removed spell tome " + theBook.GetName() + " from " + theActor.GetActorBase().GetName())
             theActor.RemoveItem(theBook, 999999, abSilent = true)
             Spellbook_SpellNotes.AddSpell(theActor, theSpell)
             numberOfTomesRemoved += 1
@@ -127,16 +128,63 @@ function TakeAwayAllSpellTomes(Actor theActor) global
 endfunction
 
 function TakeAwayAllSpells(Actor theActor) global
+    Debug.MessageBox("Taking away spells from " + theActor.GetActorBase().GetName())
     int count = theActor.GetSpellCount()
     int numberOfSpellRemoved = 0
     int i = 0
     while i < count
-        Spell theSpell = theActor.GetNthSpell(i - numberOfSpellRemoved)
-        if theSpell.GetPerk() ; Track it by default!
-            theActor.RemoveSpell(theSpell)
-            Spellbook_Spellbook.AddUnpreparedSpell(theActor, theSpell)
-            numberOfSpellRemoved += 1
+        ; Spell theSpell = theActor.GetNthSpell(i - numberOfSpellRemoved)
+        ; if theSpell.GetName()
+        ;     Debug.MessageBox("Spell " + theSpell.GetName() + " perk " + theSpell.GetPerk().GetName())
+        ;     if theSpell.GetPerk() ; Track it by default!
+        ;         theActor.RemoveSpell(theSpell)
+        ;         Debug.MessageBox("Removed spell " + theSpell.GetName() + " from " + theActor.GetActorBase().GetName())
+        ;         Spellbook_Spellbook.AddUnpreparedSpell(theActor, theSpell)
+        ;         numberOfSpellRemoved += 1
+        ;     endIf
+        ; endIf
+        i += 1
+    endWhile
+
+    ; Actor Base
+    ActorBase theActorBase = theActor.GetActorBase()
+    count = theActorBase.GetSpellCount()
+    numberOfSpellRemoved = 0
+    i = 0
+    while i < count
+        Spell theSpell = theActorBase.GetNthSpell(i - numberOfSpellRemoved)
+        if theSpell.GetName()
+            ; Debug.MessageBox("Removing Spell: " + theSpell.GetName() + " - " + theSpell.GetPerk().GetName())
+            Debug.Trace("... Removing Spell: " + theSpell.GetName() + " ~ Perk: " + theSpell.GetPerk().GetName() + " ...")
+            ; Utility.Wait(3)
+
+            ; Debug.MessageBox("[Actor Base] Spell " + theSpell.GetName() + " perk " + theSpell.GetPerk().GetName())
+            ; if theSpell.GetPerk() ; Track it by default!
+                theActor.RemoveSpell(theSpell)
+                PO3_SKSEFunctions.RemoveBaseSpell(theActor, theSpell)
+                Debug.Trace("[Actor Base] Removed spell " + theSpell.GetName() + " from " + theActor.GetActorBase().GetName())
+                Spellbook_Spellbook.AddUnpreparedSpell(theActor, theSpell)
+                numberOfSpellRemoved += 1
+            ; endIf
         endIf
         i += 1
     endWhile
+
+    ; ; Race
+    ; Race theActorRace = theActor.GetRace()
+    ; count = theActorRace.GetSpellCount()
+    ; numberOfSpellRemoved = 0
+    ; i = 0
+    ; while i < count
+    ;     Spell theSpell = theActorRace.GetNthSpell(i - numberOfSpellRemoved)
+    ;     Debug.MessageBox("[Actor RACE] Spell " + theSpell.GetName() + " perk " + theSpell.GetPerk().GetName())
+    ;     ; if theSpell.GetPerk() ; Track it by default!
+    ;         theActor.RemoveSpell(theSpell)
+    ;         PO3_SKSEFunctions.RemoveBaseSpell(theActor, theSpell)
+    ;         Debug.MessageBox("[Actor RACE] Removed spell " + theSpell.GetName() + " from " + theActor.GetActorBase().GetName())
+    ;         Spellbook_Spellbook.AddUnpreparedSpell(theActor, theSpell)
+    ;         numberOfSpellRemoved += 1
+    ;     ; endIf
+    ;     i += 1
+    ; endWhile
 endFunction
