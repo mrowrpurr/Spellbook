@@ -81,3 +81,62 @@ function AddSpellbook(Spellbook spellbookScript, Actor theActor) global
 
     theActor.AddItem(theSpellbook)
 endFunction
+
+bool function IsManaged(Actor theActor) global
+    return JFormDB.solveObj(theActor, ".spellbook")
+endFunction
+
+function ManageActor(Actor theActor) global
+    if IsManaged(theActor)
+        return
+    else
+        ; Mark them as being managed
+        JFormDB.solveObjSetter(theActor, ".spellbook", JMap.object(), createMissingKeys = true)
+
+        ; Take away their Spell Tomes!
+        TakeAwayAllSpellTomes(theActor)
+
+        ; Take away their Spells!
+        TakeAwayAllSpells(theActor)
+    endIf
+endFunction
+
+function UnmanageActor(Actor theActor) global
+    if IsManaged(theActor)
+        JFormDB.solveObjSetter(theActor, ".spellbook", 0)
+    endIf
+endFunction
+
+function TakeAwayAllSpellTomes(Actor theActor) global
+    int count = theActor.GetNumItems()
+    int numberOfTomesRemoved = 0
+    int i = 0
+    while i < count
+        Book theBook = theActor.GetNthForm(i - numberOfTomesRemoved) as Book
+        Spell theSpell
+        if theBook
+            theSpell = theBook.GetSpell()
+        endIf
+        if theSpell
+            theActor.RemoveItem(theBook, 999999, abSilent = true)
+            Spellbook_SpellNotes.AddSpell(theActor, theSpell)
+            numberOfTomesRemoved += 1
+        endIf
+        i += 1
+    endWhile
+endfunction
+
+function TakeAwayAllSpells(Actor theActor) global
+    int count = theActor.GetSpellCount()
+    int numberOfSpellRemoved = 0
+    int i = 0
+    while i < count
+        Spell theSpell = theActor.GetNthSpell(i - numberOfSpellRemoved)
+        if theSpell.GetPerk() ; Track it by default!
+            theActor.RemoveSpell(theSpell)
+            Spellbook_Spellbook.AddUnpreparedSpell(theActor, theSpell)
+            numberOfSpellRemoved += 1
+        endIf
+        i += 1
+    endWhile
+endFunction

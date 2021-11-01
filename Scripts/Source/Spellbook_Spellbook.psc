@@ -13,3 +13,7 @@ endEvent
 bool function IsSpellbook(Spellbook spellbookScript, Form theForm) global
     return SpellbookScript.Spellbook_SpellbooksFormList.HasForm(theForm)
 endFunction
+
+function AddUnpreparedSpell(Actor theActor, Spell theSpell) global
+    Debug.Notification("This will add unprepared spell")
+endFunction

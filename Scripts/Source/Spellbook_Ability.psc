@@ -18,6 +18,10 @@ endEvent
 
 ; When an item, e.g. a Spell Tome, is added to the player
 event OnItemAdded(Form theItem, int count, ObjectReference itemReference, ObjectReference container)
+    if ! Spellbook_Actor.IsManaged(ThisActor)
+        return
+    endIf
+
     ; Is this a Spell Tome?
     Spell taughtSpell
     Book theBook = theItem as Book

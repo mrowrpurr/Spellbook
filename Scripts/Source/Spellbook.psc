@@ -78,6 +78,7 @@ endFunction
 ; Mod Installation
 event OnInit()
     CurrentlyInstalledVersion = GetCurrentVersion()
+
     AddTestItems()
     RegisterForModEvent("UIListMenu_SelectItem", "OnSelect")
 endEvent

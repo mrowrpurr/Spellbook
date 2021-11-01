@@ -1,5 +1,6 @@
 scriptName Spellbook_Player extends ReferenceAlias  
 
+; Spellbook script
 Spellbook SpellbookScript
 
 ; When the alias is filled for the first time (on Mod Installation)
